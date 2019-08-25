@@ -1,5 +1,8 @@
 # interview
 
+## vue create  创建项目
+## vue add element 把elementui当作插件引入
+
 ## Project setup
 ```
 npm install
@@ -27,3 +30,4 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
