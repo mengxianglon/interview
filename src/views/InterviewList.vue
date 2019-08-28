@@ -8,19 +8,19 @@
     <el-table-column
       prop="id"
       label="编号"
-       width="80">
+      >
     </el-table-column>
 
     <el-table-column
       prop="photoDate"
       label="拍摄日期"
-      width="100">
+      >
     </el-table-column>
 
     <el-table-column
       prop="inDate"
       label="录入日期"
-      width="100">
+     >
     </el-table-column>
 
    <el-table-column
@@ -32,7 +32,7 @@
     <el-table-column
       prop="leader"
       label="编导"
-      width="100">
+      >
       <template slot-scope="scope">
         <el-tag
           type="primary"
@@ -43,7 +43,8 @@
     <el-table-column
       prop="photo"
       label="摄像"
-      width="120">
+      width="170"
+     >
       <template slot-scope="scope">
         <el-tag
           type="warning"
@@ -54,29 +55,31 @@
     <el-table-column
       prop="space"
       label="录入位置"
-      width="80">
+     >
     </el-table-column>
 
     
     <el-table-column
       prop="backup"
       label="备份位置"
-      width="80">
+      >
     </el-table-column>
 
     <el-table-column
       prop="size"
       label="文件大小"
-      width="80">
+     >
     </el-table-column>
  
     <el-table-column
       prop="copy"
       label="拷贝人"
-       width="80">
+      >
     </el-table-column>
 
-     <el-table-column label="操作">
+     <el-table-column 
+     width="150"
+     label="操作">
       <template slot-scope="scope">
         <el-button
           size="mini"
