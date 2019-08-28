@@ -1,6 +1,5 @@
 <template>
 <div>
-
   <el-table
     :data="tableData"
     style="width: 100%"
@@ -9,7 +8,7 @@
     <el-table-column
       prop="id"
       label="编号"
-       width="100">
+       width="80">
     </el-table-column>
 
     <el-table-column
@@ -44,7 +43,7 @@
     <el-table-column
       prop="photo"
       label="摄像"
-      width="150">
+      width="120">
       <template slot-scope="scope">
         <el-tag
           type="warning"
@@ -55,26 +54,26 @@
     <el-table-column
       prop="space"
       label="录入位置"
-      width="100">
+      width="80">
     </el-table-column>
 
     
     <el-table-column
       prop="backup"
       label="备份位置"
-      width="100">
+      width="80">
     </el-table-column>
 
     <el-table-column
       prop="size"
       label="文件大小"
-      width="100">
+      width="80">
     </el-table-column>
  
     <el-table-column
       prop="copy"
       label="拷贝人"
-       width="100">
+       width="80">
     </el-table-column>
 
      <el-table-column label="操作">

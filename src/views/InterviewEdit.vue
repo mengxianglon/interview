@@ -35,8 +35,8 @@
         <el-input v-model="ruleForm.photo" class="inputLen"></el-input>
       </el-form-item>
 
-      <el-form-item label="文件大小" prop="size">
-        <el-input-number v-model="ruleForm.size" @change="handleChange" :min="1" :max="100000" label="描述文字"></el-input-number>
+      <el-form-item label="文件大小,单位为GB" prop="size">
+        <el-input-number v-model="ruleForm.size" @change="handleChange" :min="1" :max="100000" label="单位为g"></el-input-number>
       </el-form-item>
 
       <el-form-item label="拷贝人" prop="copy">
@@ -70,7 +70,7 @@ export default {
           space: '备份17',
           backup: '备份17',
           photo:'徐伟浩,杨璐',
-          size:'20G',
+          size:'20',
           copy:'徐伟浩',
       },
       rules: {
@@ -87,6 +87,9 @@ export default {
     };
   },
   methods: {
+    handleChange(value){
+      console.log(value+'G')
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
