@@ -26,6 +26,7 @@
    <el-table-column
       prop="content"
       label="内容(时间/地点)"
+      width="180"
      >
     </el-table-column>
 
@@ -67,7 +68,7 @@
 
     <el-table-column
       prop="size"
-      label="文件大小"
+      label="文件大小/G"
      >
     </el-table-column>
  
@@ -144,7 +145,7 @@
           space: '备份17',
           backup: '备份17',
           photo:'徐伟浩,杨璐',
-          size:'20G',
+          size:'20',
           copy:'徐伟浩',
         }, {
           id:122,  
@@ -155,7 +156,7 @@
           space: '备份17',
           backup: '备份17',
           photo:'徐伟浩',
-          size:'20G',
+          size:'20',
           copy:'徐伟浩',
         }, {
             id:122,
@@ -166,7 +167,7 @@
           space: '备份17',
           backup: '备份17',
           photo:'徐伟浩',
-          size:'20G',
+          size:'20',
           copy:'徐伟浩',
         }, {
             id:122,
@@ -177,7 +178,7 @@
           space: '备份17',
           backup: '备份17',
           photo:'徐伟浩',
-          size:'20G',
+          size:'20',
           copy:'徐伟浩',
         }, {
             id:122,
@@ -188,7 +189,7 @@
           space: '备份17',
           backup: '备份17',
           photo:'徐伟浩',
-          size:'20G',
+          size:'20',
           copy:'徐伟浩',
         }, {
             id:122,
@@ -199,40 +200,7 @@
           space: '备份17',
           backup: '备份17',
           photo:'徐伟浩',
-          size:'20G',
-          copy:'徐伟浩',
-        }, {
-            id:122,
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20G',
-          copy:'徐伟浩',
-        }, {
-            id:122,
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20G',
-          copy:'徐伟浩',
-        }, {
-            id:122,
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20G',
+          size:'20',
           copy:'徐伟浩',
         },]
       }

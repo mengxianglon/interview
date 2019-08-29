@@ -22,7 +22,7 @@ const router = new Router({
               {path:'/interviews/create',component:InterviewEdit},
               {path:'/interviews/edit/:id',component:InterviewEdit,props:true},
               {path:'/interviews/list',component:InterviewList},
-              {path:'/interviews/InterviewSearch',name:'search',component:Search},
+              {path:'/interviews/InterviewSearch',name:'search',component:InterviewEdit},
           ]
         },
     ]
