@@ -13,7 +13,7 @@
       </el-form-item>
 
       <el-form-item label="录入日期">
-        <el-date-picker v-model="ruleForm.inDate"  type="date" placeholder="选择日期"></el-date-picker>
+        <el-date-picker v-model="ruleForm.inDate" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="内容(时间/地点)" prop="content">
@@ -32,14 +32,21 @@
         <el-input v-model.trim="ruleForm.backup" class="inputLen"></el-input>
       </el-form-item>
 
-     <el-form-item label="摄像" prop="photo">
+      <el-form-item label="摄像" prop="photo">
         <el-input v-model.trim="ruleForm.photo" class="inputLen"></el-input>
       </el-form-item>
-    <div v-if="sizes">
-      <el-form-item label="文件大小,单位为GB" prop="size">
-        <el-input-number v-model="ruleForm.size" @change="handleChange" :min="1" :max="100000" label="单位为g"></el-input-number>
-      </el-form-item>
-    </div>
+      <div v-if="sizes">
+        <el-form-item label="文件大小,单位为GB" prop="size">
+          <el-input-number
+            v-model="ruleForm.size"
+            @change="handleChange"
+            :step="0.5"
+            :min="1"
+            :max="100000"
+            label="单位为g"
+          ></el-input-number>
+        </el-form-item>
+      </div>
 
       <el-form-item label="拷贝人" prop="copy">
         <el-input v-model.trim="ruleForm.copy" class="inputLen"></el-input>
@@ -61,24 +68,25 @@
 
 <script>
 export default {
-  props:{
-    id:''
+  props: {
+    id: ""
   },
   data() {
     return {
-      type:'',
-      sizes:true,
+      type: "",
+      sizes: true,
       ruleForm: {
-         id:122,  
-          photoDate:'2019-09-11',  
-          inDate: '2019-09-22',
-          content:'',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩,杨璐',
-          size:'20',
-          copy:'徐伟浩',
+        id: 122,
+        photoDate: "2019-09-30",
+        inDate: "2019-09-22",
+        content:
+          "南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,",
+        leader: "徐伟浩",
+        space: "备份17",
+        backup: "备份17",
+        photo: "徐伟浩,杨璐",
+        size: "20",
+        copy: "徐伟浩"
       },
       rules: {
         content: [
@@ -90,7 +98,7 @@ export default {
             trigger: "blur"
           }
         ],
-         leader: [
+        leader: [
           { required: true, message: "必须有一个编导", trigger: "blur" },
           {
             min: 2,
@@ -126,7 +134,7 @@ export default {
             trigger: "blur"
           }
         ],
-         copy: [
+        copy: [
           { required: true, message: "拷贝人不能为空", trigger: "blur" },
           {
             min: 2,
@@ -134,22 +142,53 @@ export default {
             message: "长度在 2 到 100 个字符",
             trigger: "blur"
           }
-        ],
+        ]
       }
     };
   },
   methods: {
     //数字加减按钮
-    handleChange(value){
-      console.log(value)
+    handleChange(value) {
+      //console.log(value);
+    },
+     searchs() {
+      let path = this.$route.path;
+      let bool = path.indexOf("InterviewSearch");
+      return bool;
+    },
+    edits(){
+      let path = this.$route.path;
+      let bool = path.indexOf("edit");
+      return bool;
+    },
+     creates(){
+      let path = this.$route.path;
+      let bool = path.indexOf("create");
+      return bool;
+    },
+   async save(){
+     let res
+      if(this.searchs() > 0){
+       // alert("search")
+        //  res = await this.$http.post('create',this.model)
+      }else if(this.edits() >0){
+        // alert("edits")
+      }else if(this.creates() >0){
+       // alert("creates")
+       res = await this.$http.post('',this.ruleForm)
+      // res = await this.$http.post("rest/heroes", this.model);
+       console.log(res)
+      }
     },
     //参数验证
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
+        if (valid) {        //通过验证后传输
+         // alert("submit!");
+         this.save()
         } else {
-          console.log("error submit!!");
+        //  console.log("error submit!!");
+          alert('必填项不能为空')
           return false;
         }
       });
@@ -159,38 +198,36 @@ export default {
       this.$refs[formName].resetFields();
     },
     //转换时间戳
-    toTimeStamp(times){
-     return new Date(times).getTime()
+    toTimeStamp(times) {
+      return new Date(times).getTime();
     },
-    indexs(){
-      let path =this.$route.path
-      let bool =path.indexOf('InterviewSearch')
-      return bool;
-    }
+    //判断是否搜索页
   },
-  mounted(){
-   // console.log(this.$route.path)
-   //console.log(this.indexs())
-   //搜索，新增，修改，三个页面合成一个页面
-   this.indexs() == -1 ? this.sizes =true : this.sizes =false
-   if(this.indexs() == -1){    //判断是否是搜索页
-     if(this.$route.params !==''){   //判断是否是新增页面
-       this.type="修改"
-     }else{
-       this.type="新增"
-     }
-   }else{
-     this.type="搜索"
-   }
- // this.photoDate = this.toTimeStamp('2019-9-20')
- // this.inDate = this.toTimeStamp('2019-9-22')
-  //console.log(this.photoDate)
-  // console.log(this.sizes)
-    //this.indexs()? this.sizes :false
-   // console.log(this.indexs())
-  // console.log(this.toTimeStamp(this.ruleForm.inDate))
-  // console.log(new Date(times).getTime())
-  console.log(this.$route.params)
+  mounted() {
+    // console.log(this.$route.path)
+    //console.log(this.indexs())
+    //搜索，新增，修改，三个页面合成一个页面
+    this.searchs() == -1 ? (this.sizes = true) : (this.sizes = false);
+
+    if (this.searchs() == -1) {
+      //判断是否是搜索页
+      if (this.edits() > 0) {
+        this.type = "修改";
+      } else if (this.creates() > 0) {
+        this.type = "新增";
+      }
+      // this.photoDate = this.toTimeStamp('2019-9-20')
+      // this.inDate = this.toTimeStamp('2019-9-22')
+      //console.log(this.photoDate)
+      // console.log(this.sizes)
+      //this.indexs()? this.sizes :false
+      // console.log(this.indexs())
+      // console.log(this.toTimeStamp(this.ruleForm.inDate))
+      // console.log(new Date(times).getTime())
+      //console.log(this.id)
+    } else {
+      this.type = "搜索";
+    }
   }
 };
 </script>
