@@ -32,7 +32,6 @@
       <el-main>
        <router-view :key="$route.path"></router-view>
       </el-main>
-       <el-footer>共：2008条数据</el-footer>
     </el-container>
   </el-container>
 </template>

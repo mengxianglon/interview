@@ -107,7 +107,7 @@
 
 <style>
   .pages{
-      margin-top: 2.2rem;
+      margin-top: 2rem;
       text-align: center;
   }
   .el-table .warning-row {
@@ -149,17 +149,6 @@
           copy:'徐伟浩',
         }, {
           id:122,  
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20',
-          copy:'徐伟浩',
-        }, {
-            id:122,
           photoDate:'2019-9-20',  
           inDate: '2019-9-21',
           content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',

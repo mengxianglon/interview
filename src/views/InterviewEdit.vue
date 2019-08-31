@@ -7,12 +7,13 @@
       ref="ruleForm"
       label-width="170px"
       class="demo-ruleForm"
+      @submit.native.prevent="save"
     >
-      <el-form-item label="拍摄时间">
+      <el-form-item label="拍摄时间" prop="photoDate">
         <el-date-picker v-model="ruleForm.photoDate" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
-      <el-form-item label="录入日期">
+      <el-form-item label="录入日期" prop="inDate">
         <el-date-picker v-model="ruleForm.inDate" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
@@ -21,34 +22,55 @@
       </el-form-item>
 
       <el-form-item label="编导" prop="leader">
-        <el-input v-model.trim="ruleForm.leader" class="inputLen"></el-input>
+        <el-select v-model="ruleForm.leader" multiple placeholder="请选择">
+          <el-option
+            v-for="item in leaders"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="摄像" prop="photo">
-        <el-input v-model.trim="ruleForm.photo" class="inputLen"></el-input>
+        <el-select v-model="ruleForm.photo" multiple placeholder="请选择">
+          <el-option
+            v-for="item in photos"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="录入位置" prop="space">
-        <el-input v-model.trim="ruleForm.space" class="inputLen"></el-input>
+        <el-input v-model.trim="ruleForm.space" class="back"></el-input>
       </el-form-item>
 
       <el-form-item label="备份位置" prop="backup">
-        <el-input v-model.trim="ruleForm.backup" class="inputLen"></el-input>
+        <el-input v-model.trim="ruleForm.backup" class="back"></el-input>
       </el-form-item>
 
-        <el-form-item label="文件大小,单位为GB" prop="size">
-          <el-input-number
-            v-model="ruleForm.size"
-            @change="handleChange"
-            :step="0.5"
-            :min="1"
-            :max="100000"
-            label="单位为g"
-          ></el-input-number>
-        </el-form-item>
+      <el-form-item label="文件大小,单位为GB" prop="size">
+        <el-input-number
+          v-model="ruleForm.size"
+          @change="handleChange"
+          :step="0.5"
+          :min="1"
+          :max="100000"
+          label="单位为g"
+        ></el-input-number>
+      </el-form-item>
 
       <el-form-item label="拷贝人" prop="copy">
-        <el-input v-model.trim="ruleForm.copy" class="inputLen"></el-input>
+        <el-select v-model="ruleForm.copy" multiple placeholder="请选择">
+          <el-option
+            v-for="item in copys"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item>
@@ -63,6 +85,9 @@
 .inputLen {
   width: 50%;
 }
+.back {
+  width: 217px;
+}
 </style>
 
 <script>
@@ -72,21 +97,67 @@ export default {
   },
   data() {
     return {
-      type: "",
+      type: "", //判断是更新还是新增
+      leaders: [
+        {
+          value: "徐伟浩",
+          label: "徐伟浩"
+        },
+        {
+          value: "崔富宽",
+          label: "崔富宽"
+        }
+      ], //发送数据的时候，下拉菜单选项
+      photos: [
+        {
+          value: "杨璐",
+          label: "杨璐"
+        },
+        {
+          value: "张衡",
+          label: "张衡"
+        }
+      ], //发送数据的时候，下拉菜单选项
+      copys: [
+        {
+          value: "杨璐",
+          label: "杨璐"
+        },
+        {
+          value: "张衡",
+          label: "张衡"
+        }
+      ],
       ruleForm: {
         id: 122,
-        photoDate: "2019-09-30",
-        inDate: "2019-09-22",
+        photoDate: "",
+        inDate: "",
         content:
           "南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,",
-        leader: "徐伟浩",
+        leader: [],
+        photo: [],
+        copy: [],
         space: "备份17",
         backup: "备份17",
-        photo: "徐伟浩,杨璐",
-        size: "20",
-        copy: "徐伟浩"
+        size: "0"
       },
       rules: {
+        photoDate: [
+          {
+            type: 'date',
+            required: true,
+            message: "请选择日期",
+            trigger: "change"
+          }
+        ],
+        inDate: [
+          {
+            type: 'date',
+            required: true,
+            message: "请选择日期",
+            trigger: "change"
+          }
+        ],
         content: [
           { required: true, message: "内容不能为空", trigger: "blur" },
           {
@@ -97,12 +168,11 @@ export default {
           }
         ],
         leader: [
-          { required: true, message: "必须有一个编导", trigger: "blur" },
           {
-            min: 2,
-            max: 100,
-            message: "长度在 2 到 100 个字符",
-            trigger: "blur"
+            required: true,
+            message: "必须有一个编导",
+            trigger: "change",
+            type: "array"
           }
         ],
         backup: [
@@ -124,21 +194,19 @@ export default {
           }
         ],
         photo: [
-          { required: true, message: "摄像不能为空", trigger: "blur" },
           {
-            min: 2,
-            max: 100,
-            message: "长度在 2 到 100 个字符",
-            trigger: "blur"
+            required: true,
+            message: "摄像不能为空",
+            trigger: "change",
+            type: "array"
           }
         ],
         copy: [
-          { required: true, message: "拷贝人不能为空", trigger: "blur" },
           {
-            min: 2,
-            max: 100,
-            message: "长度在 2 到 100 个字符",
-            trigger: "blur"
+            required: true,
+            message: "拷贝人不能为空",
+            trigger: "change",
+            type: "array"
           }
         ]
       }
@@ -149,23 +217,26 @@ export default {
     handleChange(value) {
       //console.log(value);
     },
-   async save(){
-     let res
-     if(this.id){
-       res = await this.$http.put('',this.ruleForm)   //有id，修改
-     }else{
-        res = await this.$http.post('',this.ruleForm)  //没id，新增
-     }
+    async save() {
+      let res;
+      if (this.id) {
+        //  res = await this.$http.put("", this.ruleForm); //有id，修改
+      } else {
+          res = await this.$http.post("", this.ruleForm); //没id，新增
+           console.log(res);
+      }
     },
     //参数验证
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        if (valid) {        //通过验证后传输
-         // alert("submit!");
-         this.save()
+        if (valid) {
+          //通过验证后传输
+          // alert("submit!");
+          console.log("通过验证");
+          this.save();
         } else {
-        //  console.log("error submit!!");
-          alert('必填项不能为空')
+          //  console.log("error submit!!");
+          alert("必填项不能为空");
           return false;
         }
       });
@@ -177,29 +248,29 @@ export default {
     //转换时间戳
     toTimeStamp(times) {
       return new Date(times).getTime();
-    },
+    }
     //判断是否搜索页
   },
   mounted() {
     // console.log(this.$route.path)
     //console.log(this.indexs())
     //新增，修改，二个个页面合成一个页面
-   
-    if(this.id){
-       this.type = "修改";
-    }else{
-       this.type = "新增";
+
+    if (this.id) {
+      this.type = "修改";
+    } else {
+      this.type = "新增";
+      this.ruleForm.size = 10;
     }
-      // this.photoDate = this.toTimeStamp('2019-9-20')
-      // this.inDate = this.toTimeStamp('2019-9-22')
-      //console.log(this.photoDate)
-      // console.log(this.sizes)
-      //this.indexs()? this.sizes :false
-      // console.log(this.indexs())
-      // console.log(this.toTimeStamp(this.ruleForm.inDate))
-      // console.log(new Date(times).getTime())
-      //console.log(this.id)
-       
+    // this.photoDate = this.toTimeStamp('2019-9-20')
+    // this.inDate = this.toTimeStamp('2019-9-22')
+    //console.log(this.photoDate)
+    // console.log(this.sizes)
+    //this.indexs()? this.sizes :false
+    // console.log(this.indexs())
+    // console.log(this.toTimeStamp(this.ruleForm.inDate))
+    // console.log(new Date(times).getTime())
+    //console.log(this.id)
   }
 };
 </script>
