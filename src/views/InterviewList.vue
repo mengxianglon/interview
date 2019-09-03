@@ -6,19 +6,20 @@
     :row-class-name="tableRowClassName">
 
     <el-table-column
-      prop="id"
+      prop="tid"
       label="编号"
+      width="100"
       >
     </el-table-column>
 
     <el-table-column
-      prop="photoDate"
+      prop="photo_date"
       label="拍摄日期"
       >
     </el-table-column>
 
     <el-table-column
-      prop="inDate"
+      prop="in_date"
       label="录入日期"
      >
     </el-table-column>
@@ -40,7 +41,7 @@
           disable-transitions>{{scope.row.leader}}</el-tag>
       </template>
     </el-table-column>
-
+  
     <el-table-column
       prop="photo"
       label="摄像"
@@ -98,7 +99,10 @@
     <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000">
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+        :page-size="perpage"
+        :total="total">
     </el-pagination>
 </div>
   </div>
@@ -121,78 +125,47 @@
 
 <script>
   export default {
+      data() {
+      return {
+        perpage:1,
+        total:1,
+        tableData: []
+      }
+    },
     methods: {
       tableRowClassName({row, rowIndex}) {
         if (rowIndex%2 === 1) {
           return 'success-row';
         } 
       },
-       handleEdit(index, row) {
-        console.log(index,row);
+      async fetch(){
+        let res = await this.$http.get(`interview`)
+        this.tableData = res.data.data
+        this.total=res.data.total
+        this.perpage=res.data.per_page
       },
+      //修改按钮
+       handleEdit(index, row) {
+         this.$router.push(`/interviews/${row.tid}/edit`)
+        //console.log(row.tid);
+         // console.log(index, row);
+      },
+      //删除
       handleDelete(index, row) {
-        console.log(index, row);
-      }
+       // console.log(index, row);
+      },
+     async handleCurrentChange(val){
+        let res = await this.$http.get(`interview?page=${val}`)
+         this.tableData = res.data.data
+        //  console.log(`当前页: ${val}`);
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+    
     },
-    data() {
-      return {
-        tableData: [{
-          id:122,  
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩,杨璐',
-          size:'20',
-          copy:'徐伟浩',
-        }, {
-          id:122,  
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20',
-          copy:'徐伟浩',
-        }, {
-            id:122,
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20',
-          copy:'徐伟浩',
-        }, {
-            id:122,
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20',
-          copy:'徐伟浩',
-        }, {
-            id:122,
-          photoDate:'2019-9-20',  
-          inDate: '2019-9-21',
-          content:'南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,',
-          leader:'徐伟浩',
-          space: '备份17',
-          backup: '备份17',
-          photo:'徐伟浩',
-          size:'20',
-          copy:'徐伟浩',
-        },]
-      }
+    created(){
+      this.fetch();
     }
   }
 </script>

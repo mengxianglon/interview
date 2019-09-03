@@ -9,12 +9,12 @@
       class="demo-ruleForm"
       @submit.native.prevent="save"
     >
-      <el-form-item label="拍摄时间" prop="photoDate">
-        <el-date-picker v-model="ruleForm.photoDate" type="date" placeholder="选择日期"></el-date-picker>
+      <el-form-item label="拍摄时间" prop="photo_date">
+        <el-date-picker v-model="ruleForm.photo_date" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
-      <el-form-item label="录入日期" prop="inDate">
-        <el-date-picker v-model="ruleForm.inDate" type="date" placeholder="选择日期"></el-date-picker>
+      <el-form-item label="录入日期" prop="in_date">
+        <el-date-picker v-model="ruleForm.in_date" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="内容(时间/地点)" prop="content">
@@ -93,53 +93,31 @@
 <script>
 export default {
   props: {
-    id: ""
+    tid: ""
   },
   data() {
     return {
       type: "", //判断是更新还是新增
       leaders: [
-        {
-          value: "徐伟浩",
-          label: "徐伟浩"
-        },
-        {
-          value: "崔富宽",
-          label: "崔富宽"
-        }
+       
       ], //发送数据的时候，下拉菜单选项
       photos: [
-        {
-          value: "杨璐",
-          label: "杨璐"
-        },
-        {
-          value: "张衡",
-          label: "张衡"
-        }
+        
       ], //发送数据的时候，下拉菜单选项
       copys: [
-        {
-          value: "杨璐",
-          label: "杨璐"
-        },
-        {
-          value: "张衡",
-          label: "张衡"
-        }
+       
       ],
       ruleForm: {
-        id: 122,
-        photoDate: "",
-        inDate: "",
-        content:
-          "南阳院士工作室揭牌，南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,南阳院士工作室揭牌,",
+        tid: "",
+        photo_date: "",
+        in_date: "",
+        content:"",
         leader: [],
         photo: [],
         copy: [],
-        space: "备份17",
-        backup: "备份17",
-        size: "0"
+        space: "",
+        backup: "",
+        size: ""
       },
       rules: {
         photoDate: [
@@ -219,10 +197,10 @@ export default {
     },
     async save() {
       let res;
-      if (this.id) {
-        //  res = await this.$http.put("", this.ruleForm); //有id，修改
+      if (this.tid) {
+        //  res = await this.$http.put("", this.ruleForm); //有tid，修改
       } else {
-          res = await this.$http.post("", this.ruleForm); //没id，新增
+          res = await this.$http.post("", this.ruleForm); //没tid，新增
            console.log(res);
       }
     },
@@ -246,17 +224,21 @@ export default {
       this.$refs[formName].resetFields();
     },
     //转换时间戳
-    toTimeStamp(times) {
-      return new Date(times).getTime();
+    // toTimeStamp(times) {
+    //   return new Date(times).getTime();
+    // }
+    async fetch(){
+       let res = await this.$http.get(`interview/${this.tid}/edit`)
+       this.ruleForm = res.data
     }
-    //判断是否搜索页
   },
-  mounted() {
+  created() {
     // console.log(this.$route.path)
     //console.log(this.indexs())
     //新增，修改，二个个页面合成一个页面
 
-    if (this.id) {
+    this.tid && this.fetch();
+    if (this.tid) {
       this.type = "修改";
     } else {
       this.type = "新增";

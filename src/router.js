@@ -20,7 +20,7 @@ const router = new Router({
           component:Main,
           children:[
               {path:'/interviews/create',component:InterviewEdit},
-              {path:'/interviews/:id/edit',component:InterviewEdit,props:true},
+              {path:'/interviews/:tid/edit',component:InterviewEdit,props:true},
               {path:'/interviews/list',component:InterviewList},
               {path:'/interviews/InterviewSearch',name:'search',component:Search},
           ]
