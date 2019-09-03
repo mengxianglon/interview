@@ -9,11 +9,11 @@
       class="demo-ruleForm"
       @submit.native.prevent="save"
     >
-      <el-form-item label="拍摄时间" prop="photo_date">
+      <el-form-item label="拍摄时间" prop="photo_date | toDate">
         <el-date-picker v-model="ruleForm.photo_date" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
-      <el-form-item label="录入日期" prop="in_date">
+      <el-form-item label="录入日期" prop="in_date | toDate">
         <el-date-picker v-model="ruleForm.in_date" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
@@ -22,7 +22,7 @@
       </el-form-item>
 
       <el-form-item label="编导" prop="leader">
-        <el-select v-model="ruleForm.leader" multiple placeholder="请选择">
+        <el-select v-model="ruleForm.leader"  value-key="value" multiple placeholder="请选择">
           <el-option
             v-for="item in leaders"
             :key="item.value"
@@ -98,37 +98,31 @@ export default {
   data() {
     return {
       type: "", //判断是更新还是新增
-      leaders: [
-       
-      ], //发送数据的时候，下拉菜单选项
-      photos: [
-        
-      ], //发送数据的时候，下拉菜单选项
-      copys: [
-       
-      ],
+      leaders: "", //发送数据的时候，下拉菜单选项
+      photos: "", //发送数据的时候，下拉菜单选项
+      copys: "",
       ruleForm: {
         tid: "",
-        photo_date: "",
+        photo_date:"",
         in_date: "",
         content:"",
-        leader: [],
+        leader:[],
         photo: [],
-        copy: [],
+        copy:[],
         space: "",
         backup: "",
         size: ""
       },
       rules: {
-        photoDate: [
+        photo_date: [
           {
-            type: 'date',
+            type: 'data',
             required: true,
             message: "请选择日期",
             trigger: "change"
           }
         ],
-        inDate: [
+        in_date: [
           {
             type: 'date',
             required: true,
@@ -223,20 +217,28 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    //转换时间戳
-    // toTimeStamp(times) {
-    //   return new Date(times).getTime();
-    // }
     async fetch(){
        let res = await this.$http.get(`interview/${this.tid}/edit`)
        this.ruleForm = res.data
+       let user = await this.$http.get(`users`)
+         this.leaders= user.data[0].leader
+      //  this.photos=user.data[1].photo
+      //  this.copys=user.data[2].copy
+       console.log(user.data[0].leader);
+    }
+  },
+    //转换时间戳
+  filters:{
+     toDate(time) {
+       let times =time
+    //  return  time ? time :'' 
+    if(times !== 0){
+      return times
+    }
+    return ''
     }
   },
   created() {
-    // console.log(this.$route.path)
-    //console.log(this.indexs())
-    //新增，修改，二个个页面合成一个页面
-
     this.tid && this.fetch();
     if (this.tid) {
       this.type = "修改";
@@ -244,15 +246,7 @@ export default {
       this.type = "新增";
       this.ruleForm.size = 10;
     }
-    // this.photoDate = this.toTimeStamp('2019-9-20')
-    // this.inDate = this.toTimeStamp('2019-9-22')
-    //console.log(this.photoDate)
-    // console.log(this.sizes)
-    //this.indexs()? this.sizes :false
-    // console.log(this.indexs())
-    // console.log(this.toTimeStamp(this.ruleForm.inDate))
-    // console.log(new Date(times).getTime())
-    //console.log(this.id)
+
   }
 };
 </script>
