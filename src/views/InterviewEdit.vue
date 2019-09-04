@@ -9,11 +9,11 @@
       class="demo-ruleForm"
       @submit.native.prevent="save"
     >
-      <el-form-item label="拍摄时间" prop="photo_date | toDate">
+      <el-form-item label="拍摄时间" prop="photo_date ">
         <el-date-picker v-model="ruleForm.photo_date" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
-      <el-form-item label="录入日期" prop="in_date | toDate">
+      <el-form-item label="录入日期" prop="in_date ">
         <el-date-picker v-model="ruleForm.in_date" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
 
@@ -22,23 +22,23 @@
       </el-form-item>
 
       <el-form-item label="编导" prop="leader">
-        <el-select v-model="ruleForm.leader"  value-key="value" multiple placeholder="请选择">
+        <el-select v-model="ruleForm.leader" value-key="id" multiple placeholder="请选择">
           <el-option
             v-for="item in leaders"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.username"
+            :value="item.username"
           ></el-option>
         </el-select>
       </el-form-item>
 
       <el-form-item label="摄像" prop="photo">
-        <el-select v-model="ruleForm.photo" multiple placeholder="请选择">
+        <el-select v-model="ruleForm.photo" multiple value-key="id" placeholder="请选择">
           <el-option
             v-for="item in photos"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.username"
+            :value="item.username"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -63,12 +63,12 @@
       </el-form-item>
 
       <el-form-item label="拷贝人" prop="copy">
-        <el-select v-model="ruleForm.copy" multiple placeholder="请选择">
+        <el-select v-model="ruleForm.copy" multiple value-key="id" placeholder="请选择">
           <el-option
             v-for="item in copys"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.username"
+            :value="item.username"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -98,25 +98,25 @@ export default {
   data() {
     return {
       type: "", //判断是更新还是新增
-      leaders: "", //发送数据的时候，下拉菜单选项
-      photos: "", //发送数据的时候，下拉菜单选项
-      copys: "",
+      leaders: [], //发送数据的时候，下拉菜单选项
+      photos: [], //发送数据的时候，下拉菜单选项
+      copys: [],
       ruleForm: {
         tid: "",
-        photo_date:"",
-        in_date: "",
-        content:"",
-        leader:[],
+        photo_date: new Date(),
+        in_date: new Date(),
+        content: "",
+        leader: [],
         photo: [],
-        copy:[],
-        space: "",
-        backup: "",
+        copy: [],
+        space: "备份",
+        backup: "备份",
         size: ""
       },
       rules: {
         photo_date: [
           {
-            type: 'data',
+            type: "data",
             required: true,
             message: "请选择日期",
             trigger: "change"
@@ -124,7 +124,7 @@ export default {
         ],
         in_date: [
           {
-            type: 'date',
+            type: "date",
             required: true,
             message: "请选择日期",
             trigger: "change"
@@ -133,9 +133,9 @@ export default {
         content: [
           { required: true, message: "内容不能为空", trigger: "blur" },
           {
-            min: 5,
+            min: 2,
             max: 5000,
-            message: "长度在 5 到 5000 个字符",
+            message: "长度在 2 到 5000 个字符",
             trigger: "blur"
           }
         ],
@@ -192,11 +192,16 @@ export default {
     async save() {
       let res;
       if (this.tid) {
-        //  res = await this.$http.put("", this.ruleForm); //有tid，修改
+        res = await this.$http.put(`interview/${this.tid}`, this.ruleForm); //有tid，修改
       } else {
-          res = await this.$http.post("", this.ruleForm); //没tid，新增
-           console.log(res);
+        res = await this.$http.post("interview", this.ruleForm); //没tid，新增
+       // console.log(res);
       }
+      this.$router.push("/interviews/list");
+      this.$message({
+        type: "success",
+        message: "保存成功"
+      });
     },
     //参数验证
     submitForm(formName) {
@@ -217,36 +222,39 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    async fetch(){
-       let res = await this.$http.get(`interview/${this.tid}/edit`)
-       this.ruleForm = res.data
-       let user = await this.$http.get(`users`)
-         this.leaders= user.data[0].leader
-      //  this.photos=user.data[1].photo
-      //  this.copys=user.data[2].copy
-       console.log(user.data[0].leader);
+    async fetch() {
+      let res = await this.$http.get(`interview/${this.tid}/edit`);
+      this.ruleForm = res.data;
+      //console.log(user.data[0].leader);
+      // console.log();
+    },
+    async user() {
+      let user = await this.$http.get(`users`);
+      this.leaders = user.data[0];
+      this.photos = user.data[1];
+      this.copys = user.data[2];
     }
   },
-    //转换时间戳
-  filters:{
-     toDate(time) {
-       let times =time
-    //  return  time ? time :'' 
-    if(times !== 0){
-      return times
-    }
-    return ''
+  //转换时间戳
+  filters: {
+    toDate(time) {
+      let times = time;
+      //  return  time ? time :''
+      if (times !== 0) {
+        return times;
+      }
+      return "";
     }
   },
   created() {
     this.tid && this.fetch();
+    this.user();
     if (this.tid) {
       this.type = "修改";
     } else {
       this.type = "新增";
       this.ruleForm.size = 10;
     }
-
   }
 };
 </script>

@@ -2,6 +2,7 @@
 <div>
   <el-table
     :data="tableData"
+     border
     style="width: 100%"
     :row-class-name="tableRowClassName">
 
@@ -89,7 +90,7 @@
         <el-button
           size="mini"
           type="danger"
-          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          @click="handleDelete(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -109,7 +110,9 @@
 
 </template>
 
-<style>
+
+
+<style scoped>
   .pages{
       margin-top: 2rem;
       text-align: center;
@@ -121,6 +124,9 @@
   .el-table .success-row {
     background: #f0f9eb;
   }
+.el-table td, .el-table th {
+    text-align: center;
+}
 </style>
 
 <script>
@@ -143,6 +149,7 @@
         this.tableData = res.data.data
         this.total=res.data.total
         this.perpage=res.data.per_page
+       
       },
       //修改按钮
        handleEdit(index, row) {
@@ -151,9 +158,20 @@
          // console.log(index, row);
       },
       //删除
-      handleDelete(index, row) {
-       // console.log(index, row);
-      },
+     handleDelete(row) {
+      this.$confirm(`是否确定要删除编号为"${row.tid}"`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(async () => {
+        const res = await this.$http.delete(`interview/${row.tid}`);
+        this.$message({
+          type: "success",
+          message: "删除成功!"
+        });
+        this.fetch();
+      });
+    },
      async handleCurrentChange(val){
         let res = await this.$http.get(`interview?page=${val}`)
          this.tableData = res.data.data
