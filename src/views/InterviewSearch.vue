@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1>搜索采访</h1>
+     <el-page-header @back="$router.push('/interviews/list')" content="搜索采访">
+</el-page-header>
+ <el-divider></el-divider>
     <el-form
       :model="ruleForm"
       ref="ruleForm"
@@ -67,6 +69,10 @@
 }
 .back {
   width: 217px;
+}
+.el-page-header__content {
+    font-size: 18px;
+    color: #2145d0;
 }
 </style>
 

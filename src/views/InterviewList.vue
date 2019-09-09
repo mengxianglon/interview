@@ -112,7 +112,7 @@
 
 
 
-<style scoped>
+<style>
   .pages{
       margin-top: 2rem;
       text-align: center;
@@ -125,9 +125,11 @@
     background: #f0f9eb;
   }
 .el-table td, .el-table th {
-    text-align: center;
+    text-align: center !important;
 }
 </style>
+
+
 
 <script>
   export default {
