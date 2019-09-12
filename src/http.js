@@ -6,12 +6,25 @@ const http = axios.create({
     baseURL:'http://a.hnggjkw.com/web'
 })
 
+//让ajax携带cookie
+// axios.defaults.withCredentials=true;
+
+//请求头
+http.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    if (localStorage.token) {
+      config.headers.token = localStorage.token
+      config.headers.username = localStorage.username
+    }
+    return config;
+  }, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  });
+
+
+//响应头
 http.interceptors.response.use(res => {
-   // console.log(res.data)
-    Vue.prototype.$message({
-        type: 'success',
-        message: res.data.msg
-      })
     return res
   }, err => {
     if (err.response.data.msg) {
@@ -25,8 +38,7 @@ http.interceptors.response.use(res => {
         router.push('/login')
       }
     }
-    
-    return Promise.reject(err)
+    return Promise.reject()
   })
 
 
