@@ -14,7 +14,7 @@ http.interceptors.request.use(function (config) {
     // Do something before request is sent
     if (localStorage.token) {
       config.headers.token = localStorage.token
-      config.headers.username = localStorage.username
+      config.headers.phone = localStorage.phone
     }
     return config;
   }, function (error) {

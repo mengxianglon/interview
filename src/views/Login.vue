@@ -13,8 +13,8 @@
           :rules="rules"
           :model="logins"
         >
-          <el-form-item label="登陆名" prop="username">
-            <el-input v-model="logins.username"></el-input>
+          <el-form-item label="手机号" prop="phone">
+            <el-input v-model="logins.phone"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input type="password" v-model="logins.password"></el-input>
@@ -33,9 +33,9 @@
           :rules="rules"
           :model="registers"
         >
-          <el-form-item label="登录名" prop="username">
-            <el-input v-model="registers.username"></el-input>
-          </el-form-item>
+        <el-form-item label="手机" prop="phone">
+            <el-input type="text" v-model="registers.phone"></el-input>
+        </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input type="password" v-model="registers.password"></el-input>
           </el-form-item>
@@ -46,10 +46,7 @@
             <el-input v-model="registers.realname"></el-input>
           </el-form-item>
           <el-form-item label="电子邮件" prop="email">
-            <el-input type="password" v-model="registers.email"></el-input>
-          </el-form-item>
-          <el-form-item label="手机" prop="phone">
-            <el-input type="password" v-model="registers.phone"></el-input>
+            <el-input type="text" v-model="registers.email"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('registers')">注册</el-button>
@@ -90,7 +87,7 @@ export default {
     };
     var validatePhone = (rule, value, callback) => {
       let pattern = /^1(3|4|5|6|7|8|9)\d{9}$/;
-      if (!pattern.test(this.registers.phone)) {
+      if (!pattern.test(value)) {
         callback(new Error("请输入正确的手机号!"));
       }else {
         callback();
@@ -100,29 +97,25 @@ export default {
       activeName: 'loginTab',
       forgets: {},
       logins: {
-        username: "",
+        phone: "",
         password: ""
       },
       registers: {
-        username: "",
+        phone: "",
         password: "",
         checkPass: "",
         realname:"",
         email: "",
-        phone: ""
       },
       rules: {
-        username: [
-          { required: true, message: "请输入登录名", trigger: "blur" },
+        password: [
+          { required: true, message: "密码不能为空", trigger: "change" },
           {
-            min: 2,
-            max: 10,
-            message: "登录名长度在 2 到 10 个字符",
+            min: 6,
+            max: 15,
+            message: "密码长度在 6 到 15 个字符",
             trigger: "blur"
           }
-        ],
-        password: [
-          { required: true, message: "密码不能为空", trigger: "change" }
         ],
         checkPass: [
           { required: true, message: "请再次输入密码", trigger: "blur" },
@@ -164,9 +157,9 @@ export default {
       const res = await this.$http.post("login", this.logins);
      // console.log( res.data)
       sessionStorage.token = res.data.token
-      sessionStorage.username =res.data.username
+      sessionStorage.phone =res.data.phone
       localStorage.token = res.data.token
-      localStorage.username =res.data.username
+      localStorage.phone =res.data.phone
       this.$router.push("/interviews/list");
       this.$message({
         type: "success",
@@ -181,8 +174,8 @@ export default {
         type: "success",
         message: "注册成功"
       });
-      formField.resetFields()
-      this.activeName ='loginTab'
+     formField.resetFields()
+     this.activeName ='loginTab'
      
     },
 

@@ -60,7 +60,7 @@
 export default {
   data() {
     return {
-      user: localStorage.username
+      user: localStorage.phone
     };
   },
   methods: {
@@ -69,7 +69,7 @@ export default {
     },
  async  loginOut(){
      await localStorage.removeItem('token')
-     await localStorage.removeItem('username')
+     await localStorage.removeItem('phone')
      await this.$router.push('/login')
     }
   }

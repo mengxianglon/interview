@@ -28,8 +28,8 @@
           <el-option
             v-for="item in leaders"
             :key="item.id"
-            :label="item.username"
-            :value="item.username"
+            :label="item.realname"
+            :value="item.realname"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -39,8 +39,8 @@
           <el-option
             v-for="item in photos"
             :key="item.id"
-            :label="item.username"
-            :value="item.username"
+            :label="item.realname"
+            :value="item.realname"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -69,8 +69,8 @@
           <el-option
             v-for="item in copys"
             :key="item.id"
-            :label="item.username"
-            :value="item.username"
+            :label="item.realname"
+            :value="item.realname"
           ></el-option>
         </el-select>
       </el-form-item>
